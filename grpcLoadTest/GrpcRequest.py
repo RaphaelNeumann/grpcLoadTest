@@ -2,6 +2,7 @@ import os
 import grpc
 import importlib
 import json
+import time
 from grpc_tools import protoc
 from pathlib import Path
 from shutil import copyfile
@@ -48,6 +49,7 @@ class GrpcRequest():
     
     def streamRequest(self):
         response_code = grpc.StatusCode.OK
+        time_stat = time.perf_counter()
         with grpc.insecure_channel(self.url) as channel:
             stub = self._grpc.ApiStub(channel) #TODO chamada dinamica
             interator = iter(self.request)
@@ -56,23 +58,23 @@ class GrpcRequest():
             except grpc.RpcError as e:
                 response_code = e.code()
             for  response in responses:
-               print (response.details.error)
-        return response_code
+                #todo entender pq precisa desse for
+                False
+        time_stop = time.perf_counter()
+        return {"reponse_code":response_code, "duration":(time_stop-time_stat) }
     
-    def createRequest(self, json_string):
+    def createRequester(self, json_string=False):
+        str_param = ''
         if json_string:
             data = json.loads(json_string)
             params = []
             for i in data.keys():
                 params.append("=".join([i, f'"{data[i]}"']))
             str_param =", ".join(params)
-            if (self.request_type):
-                str_request = "self._pb2.{}({})".format(self.request_type, str_param)
-                print (str_request)
-                self.request.append(eval(str_request))
-            else:
-                print ('flow not completed')
-                exit()
+
+        if (self.request_type):
+            str_request = "self._pb2.{}({})".format(self.request_type, str_param)
+            self.request.append(eval(str_request))
         else:
-                print ('flow not completed')
-                exit()
+            self.request.append(str_param)
+        
