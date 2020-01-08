@@ -1,15 +1,11 @@
 import sys
 import os
 import argparse
-import pkg_resources
 import grpc
 from grpc_tools import protoc
 from pathlib import Path
 from shutil import copyfile
 import importlib
-import inspect
-import queue
-import logging
 
 def main():
     parser = argparse.ArgumentParser(description='test')
@@ -60,5 +56,4 @@ def normalize_proto(proto_file):
         return dest_file
 
 if __name__ == '__main__':
-    logging.basicConfig()
     main()
