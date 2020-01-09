@@ -84,7 +84,7 @@ class GrpcRequest():
                 response_code = e.code()
             
         time_stop = time.perf_counter()
-        return {"reponse_code":response_code, "duration":(time_stop-time_stat) }
+        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000 }
     
     def basicRequest(self):
         response_code = grpc.StatusCode.OK
@@ -106,7 +106,7 @@ class GrpcRequest():
             except grpc.RpcError as e:
                 response_code = e.code()
         time_stop = time.perf_counter()
-        return {"reponse_code":response_code, "duration":(time_stop-time_stat) }
+        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000 }
     
 
     def createRequester(self, json_string=False):
