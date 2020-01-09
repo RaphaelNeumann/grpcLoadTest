@@ -6,14 +6,15 @@ import importlib
 import json
 import time
 import random
-from grpc_tools import command
+from grpc_tools import protoc
 from pathlib import Path
 from shutil import copyfile
 
 class GrpcRequest():
     def __init__(self, proto_file, call, url, requester_type=False):
         self.proto_file = proto_file
-        command.build_package_protos(os.path.dirname(os.path.abspath(self.proto_file)))
+        #command.build_package_protos(os.path.dirname(os.path.abspath(self.proto_file)))
+        self._build_proto()
         self._grpc = self._import_grpc()
         self._pb2 = self._import_pb2()
         self.url = url
@@ -36,14 +37,11 @@ class GrpcRequest():
     def _build_proto(self):
         # Get root of proto folder
         inclusion_root = (os.path.dirname(os.path.abspath(self.proto_file)))
-
-      
-        
         command = [
             'grpc_tools.protoc',
             '--proto_path={}'.format(inclusion_root),
-            '--python_out={}'.format(inclusion_root),
-            '--grpc_python_out={}'.format(inclusion_root),
+            '--python_out={}/.grpcLoadTest'.format(inclusion_root),
+            '--grpc_python_out={}/.grpcLoadTest'.format(inclusion_root),
         ] + [ self.proto_file ]
 
         
@@ -51,10 +49,11 @@ class GrpcRequest():
             sys.stderr.write('warning: {} failed'.format(command))
             exit(1)
 
-    def _norm_grpc(self,  grpc_file):    
-        file_name = Path(grpc_file).stem
+    def _norm_grpc(self,  grpc_file):
+        inclusion_root = (os.path.dirname(os.path.abspath(self.proto_file))) + '/.grpcLoadTest/'    
+        file_name = Path(inclusion_root+grpc_file).stem
         dest_file = file_name.replace(".", "_dot_") + '.py'
-        copyfile(grpc_file, dest_file)
+        copyfile(inclusion_root+grpc_file, inclusion_root+dest_file)
         return dest_file
 
     def _import_grpc(self):
