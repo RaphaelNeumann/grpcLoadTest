@@ -5,6 +5,7 @@ import grpc
 import importlib
 import json
 import time
+import random
 from grpc_tools import command
 from pathlib import Path
 from shutil import copyfile
@@ -70,7 +71,8 @@ class GrpcRequest():
     def streamRequest(self):
         response_code = grpc.StatusCode.OK
         time_stat = time.perf_counter()
-        with grpc.insecure_channel(self.url) as channel:
+        url = random.choice(self.url)
+        with grpc.insecure_channel(url) as channel:
             str_stub = "self._grpc.{}(channel)".format(self.stubName)
             stub = eval(str_stub)
             interator = iter(self.requests)
@@ -84,12 +86,13 @@ class GrpcRequest():
                 response_code = e.code()
             
         time_stop = time.perf_counter()
-        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000 }
+        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000, "host":url }
     
     def basicRequest(self):
         response_code = grpc.StatusCode.OK
         time_stat = time.perf_counter()
-        channel = grpc.insecure_channel(self.url)
+        url = random.choice(self.url)
+        channel = grpc.insecure_channel(url)
         str_stub = "self._grpc.{}(channel)".format(self.stubName)
         stub = eval(str_stub)
         if (len(self.requests)  > 0):
@@ -106,7 +109,7 @@ class GrpcRequest():
             except grpc.RpcError as e:
                 response_code = e.code()
         time_stop = time.perf_counter()
-        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000 }
+        return {"reponse_code":response_code, "duration":(time_stop-time_stat)*1000, "host":url }
     
 
     def createRequester(self, json_string=False):
