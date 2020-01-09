@@ -10,6 +10,35 @@ sh install.sh
 
 # Utilização
 ```bash
+usage: grpcLoadTest [-h] --proto PROTO --call CALL -H HOSTS [HOSTS ...]
+                    [--request_type REQUEST_TYPE] [--data DATA]
+                    [--bidirectional] [--threads THREADS]
+                    [--requests REQUESTS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --proto PROTO         O arquivo .pro (The Protocol Buffer)
+  --call CALL           Methodo que deve ser chamado via gRPC no formato
+                        'package.Service.Method'
+  -H HOSTS [HOSTS ...], --hosts HOSTS [HOSTS ...]
+                        <hosts> Lista dos hosts e porta a serem testados
+                        separados por spaço no fomrmato '<ip_or_dns>:<port>'
+                        ex.: '--host localhost:5001 localhost:5002
+  --request_type REQUEST_TYPE
+                        Tipo de request a ser utilizado para criar o parametro
+                        de chamada
+  --data DATA           Dados de parametros escrito na forma de json ex: "--
+                        data '{"product_id":"GyhyFM3T3U88mg4d","user_id":"8Pii
+                        sPOauwPZzWTT"}'"
+  --bidirectional       A requisição é do tipo bidirecional?
+  --threads THREADS     Numero de threads/chamadas em concorrencias. valor
+                        padrão: 10. Obs esse numero não deve ser maior que o
+                        numero de requisições
+  --requests REQUESTS   Numero de requisições para cada URL. valor padrão: 200
+```
+
+# Exemplo
+```bash
 grpcLoadTest --prot discounts.api.v1.proto --call discounts.Api.getDiscounts --host localhost:5001 localhost:5002 --bidirection --request_type=GetDiscountsRequest --data '{"product_id":"GyhyFM3T3U88mg4d","user_id":"8PiisPOauwPZzWTT"}'
 
 ### GENERAL:

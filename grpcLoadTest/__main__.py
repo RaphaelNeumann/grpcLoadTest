@@ -10,16 +10,15 @@ from .RequestWorker import RequestWorker
 from .RequestReport import RequestReport
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--proto", required=True, help="Proto file")
-    parser.add_argument("--call", required=True, help="Methodo que deve ser chamado via gRPC")
-    parser.add_argument('-H', '--hosts', nargs='+',action='store', dest='hosts', help="Lista dos hosts a serem testados", required=True)
- 
-    parser.add_argument("--request_type", default=False)
-    parser.add_argument("--data", action='store', dest='data', default=False)
-    parser.add_argument("--bidirectional",action='store_true', default=False, help='A requisição deve ser bidirectional')
-    parser.add_argument("--threads", default=10, help="Numero de Threads", type=int)
-    parser.add_argument("--requests", default=200, help="Numero de requisições para cada URL", type=int)
+    parser = argparse.ArgumentParser('grpcLoadTest')
+    parser.add_argument("--proto", required=True, help="O arquivo .pro (The Protocol Buffer)")
+    parser.add_argument("--call", required=True, help="Methodo que deve ser chamado via gRPC no formato 'package.Service.Method'")
+    parser.add_argument('-H', '--hosts', nargs='+',action='store', dest='hosts', help="<hosts> Lista dos hosts e porta a serem testados separados por spaço no fomrmato '<ip_or_dns>:<port>' ex.: '--host localhost:5001 localhost:5002\n Necessário estar no mesmo diretorio que o arquivo .proto", required=True)
+    parser.add_argument("--request_type", default=False, help='Tipo de request a ser utilizado para criar o parametro de chamada')
+    parser.add_argument("--data", action='store', dest='data', default=False, help="Dados de parametros escrito na forma de json ex: \"--data '{\"product_id\":\"GyhyFM3T3U88mg4d\",\"user_id\":\"8PiisPOauwPZzWTT\"}'\"")
+    parser.add_argument("--bidirectional",action='store_true', default=False, help="A requisição é do tipo bidirecional?")
+    parser.add_argument("--threads", default=10, help= 'Numero de threads/chamadas em concorrencias. valor padrão: 10. Obs esse numero não deve ser maior que o numero de requisições')
+    parser.add_argument("--requests", default=200, help="Numero de requisições para cada URL. valor padrão: 200", type=int)
  
     args = parser.parse_args()   
     start_time = time.perf_counter()
