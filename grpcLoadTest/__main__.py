@@ -11,9 +11,9 @@ from .RequestReport import RequestReport
 
 def main():
     parser = argparse.ArgumentParser('grpcLoadTest')
-    parser.add_argument("--proto", required=True, help="O arquivo .pro (The Protocol Buffer)")
+    parser.add_argument("--proto", required=True, help="O arquivo .pro (The Protocol Buffer) OBS: Necessário estar no mesmo diretorio que o arquivo .proto")
     parser.add_argument("--call", required=True, help="Methodo que deve ser chamado via gRPC no formato 'package.Service.Method'")
-    parser.add_argument('-H', '--hosts', nargs='+',action='store', dest='hosts', help="<hosts> Lista dos hosts e porta a serem testados separados por spaço no fomrmato '<ip_or_dns>:<port>' ex.: '--host localhost:5001 localhost:5002\n Necessário estar no mesmo diretorio que o arquivo .proto", required=True)
+    parser.add_argument('-H', '--hosts', nargs='+',action='store', dest='hosts', help="<hosts> Lista dos hosts e porta a serem testados separados por spaço no fomrmato '<ip_or_dns>:<port>' ex.: '--host localhost:5001 localhost:5002'", required=True)
     parser.add_argument("--request_type", default=False, help='Tipo de request a ser utilizado para criar o parametro de chamada')
     parser.add_argument("--data", action='store', dest='data', default=False, help="Dados de parametros escrito na forma de json ex: \"--data '{\"product_id\":\"GyhyFM3T3U88mg4d\",\"user_id\":\"8PiisPOauwPZzWTT\"}'\"")
     parser.add_argument("--bidirectional",action='store_true', default=False, help="A requisição é do tipo bidirecional?")

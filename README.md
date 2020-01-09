@@ -17,13 +17,14 @@ usage: grpcLoadTest [-h] --proto PROTO --call CALL -H HOSTS [HOSTS ...]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --proto PROTO         O arquivo .pro (The Protocol Buffer)
+  --proto PROTO         O arquivo .pro (The Protocol Buffer) OBS: Necessário
+                        estar no mesmo diretorio que o arquivo .proto
   --call CALL           Methodo que deve ser chamado via gRPC no formato
                         'package.Service.Method'
   -H HOSTS [HOSTS ...], --hosts HOSTS [HOSTS ...]
                         <hosts> Lista dos hosts e porta a serem testados
                         separados por spaço no fomrmato '<ip_or_dns>:<port>'
-                        ex.: '--host localhost:5001 localhost:5002
+                        ex.: '--host localhost:5001 localhost:5002'
   --request_type REQUEST_TYPE
                         Tipo de request a ser utilizado para criar o parametro
                         de chamada
